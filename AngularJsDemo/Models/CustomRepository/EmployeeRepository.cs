@@ -121,7 +121,7 @@ namespace AngularJsDemo.Models.CustomRepository
                                                EmpImage = x.EmpImage,
                                                Birthdate = x.Birthdate,
                                                EmpDesignation = x.EmpDesignation,
-                                               HbList = x.EmpHobby!= null? HbList(x.EmpHobby.Split(',')):HbList(null)
+                                               HbList = x.EmpHobby!= null? HbList(x.EmpHobby.Split(',')):HbList()
                                            }).ToList();
                 }
                 return pageDetails;
