@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="RoleController">
+    <ol class="breadcrumb breadcrumb-quirk">
+        <li><i class="fa fa-check-square mr5"></i> Role</li>
+    </ol>
+    <hr />
+
+    <!--Form-->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Form</h4>
+                    <hr>
+                </div>
+                <div class="panel-body">
+                    <form name="myform" id="myform" action="#" class="form-horizontal" novalidate>
+                        <div class="form-group" ng-class="{ 'has-error' : myform.Name.$invalid && !myform.Name.$pristine }">
+                            <label class="col-sm-3 control-label">Name*</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="Name" ng-model="Name" id="Name" required placeholder="Name" class="form-control" />
+                                <p ng-show="myform.Name.$invalid && !myform.Name.$pristine" class="help-block">Name is required.</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Description</label>
+                            <div class="col-sm-8">
+                                <textarea name="Description" ng-model="Description" id="Description" placeholder="Description" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"></label>
+                            <div class="col-sm-8">
+                                <input type="button" id="submit" value="Save" ng-disabled="myform.$invalid" ng-click="Save();" class="btn btn-success" />
+                                <input type="button" id="Reset" value="Reset" ng-click="Reset();" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--List-->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">List</h4>
+                    <hr>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table datatable="ng" dt-column-defs="dtColumnDefs" dt-options="dtOptions" class="table table-bordered table-striped-col dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th class="center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="role in roles">
+                                    <td>{{role.Name}}</td>
+                                    <td>{{role.Description}}</td>
+                                    <td class="center">
+                                        <span ng-click="Edit(role);ScrollTop();" class="btn btn-primary btn-sm">Edit</span>
+                                        <span ng-click="Delete(role);" class="btn btn-danger btn-sm">Delete</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
