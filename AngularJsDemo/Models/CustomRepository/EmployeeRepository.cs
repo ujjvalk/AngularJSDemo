@@ -106,7 +106,8 @@ namespace AngularJsDemo.Models.CustomRepository
                                                EmpEmail = e.EmpEmail,
                                                EmpImage = e.EmpImage,
                                                Birthdate = e.Birthdate,
-                                               EmpDesignation = e.EmpDesignation
+                                               EmpDesignation = e.EmpDesignation,
+                                               //DOB = e.Birthdate.Value.ToString("mm/dd/yy")
                                            })
                                            .AsEnumerable()
                                            .Select(x => new EmployeeModel
@@ -119,7 +120,8 @@ namespace AngularJsDemo.Models.CustomRepository
                                                HName = GetHobbyString(x.EmpHobby),
                                                EmpEmail = x.EmpEmail,
                                                EmpImage = x.EmpImage,
-                                               Birthdate = x.Birthdate,
+                                               Birthdate = x.Birthdate.Value,
+                                               //DOB = x.DOB,
                                                EmpDesignation = x.EmpDesignation,
                                                HbList = x.EmpHobby!= null? HbList(x.EmpHobby.Split(',')):HbList()
                                            }).ToList();

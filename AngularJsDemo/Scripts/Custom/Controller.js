@@ -77,6 +77,7 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
         $scope.EmpGender = "Male";
         $scope.EmpEmail = "";
         $scope.EmpDesignation = "";
+        $scope.Birthdate = "";
         angular.forEach($scope.HbList, function (hobby) {
             hobby.Selelcted = false;
         });
@@ -90,6 +91,7 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
             EmpAddress: $scope.EmpAddress,
             EmpEmail: $scope.EmpEmail,
             EmpGender: $scope.EmpGender,
+            Birthdate: $scope.Birthdate,
             EmpDesignation: $scope.EmpDesignation,
             IsDelete: false,
             IsActive: true,
@@ -128,6 +130,13 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
 
     //Edit
     $scope.Edit = function (emp) {
+        debugger;
+        // parse JSON formatted date to javascript date object
+        var bdate = new Date(parseInt(emp.Birthdate.substr(6)));
+
+        // format display date (e.g. 04/10/2012)
+        var displayDate = $.datepicker.formatDate("mm/dd/yy", bdate);
+
         var getEmpData = employeeService.GetById(emp.EmpId);
         getEmpData.then(function () {
             $scope.EmpId = emp.EmpId;
@@ -135,6 +144,7 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
             $scope.EmpAddress = emp.EmpAddress;
             $scope.EmpGender = emp.EmpGender;
             $scope.EmpEmail = emp.EmpEmail;
+            $scope.Birthdate = displayDate;
             $scope.EmpDesignation = emp.EmpDesignation;
             $scope.HbList = emp.HbList;
         },
