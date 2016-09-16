@@ -130,7 +130,7 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
 
     //Edit
     $scope.Edit = function (emp) {
-        debugger;
+        
         // parse JSON formatted date to javascript date object
         var bdate = new Date(parseInt(emp.Birthdate.substr(6)));
 
