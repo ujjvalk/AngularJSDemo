@@ -16,16 +16,6 @@ app.service("employeeService", function ($http) {
         return $http.post("/Employee/GetHobbyResult");
     }
 
-    ////GetById
-    //this.GetById = function (EmpId) {
-    //    var responce = $http.post({
-    //        method: "post",
-    //        url: '/Employee/GetById',
-    //        params: { empId: JSON.stringify(EmpId) },
-    //        dataType:"json"
-    //    });
-    //    return responce;
-    //}
 
     //GetById
     this.GetById = function (EmpId) {
@@ -67,6 +57,18 @@ app.service("employeeService", function ($http) {
             url: "Employee/Index",
             data: JSON.stringify(emp),
             dataType: "json"
+        });
+        return response;
+    }
+
+    //Upload Image
+    this.uploadFile = function (file, uploadUrl) {
+        var fd = new FormData();
+        fd.append('EmpImage', file);
+        var response = $http.post('/Employee/Upload', fd,
+        {
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
         });
         return response;
     }

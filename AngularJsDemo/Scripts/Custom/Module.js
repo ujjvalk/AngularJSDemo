@@ -23,6 +23,29 @@ app.directive("datepicker", function () {
     };
 });
 
+//File Upload directive
+app.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        template: "<input type='file' />",
+        link: function (scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+            var onChange = $parse(attrs.onChange);
+
+            var updateModel = function () {
+                scope.$apply(function () {
+                    modelSetter(scope, element[0].files[0]);
+                    onChange(scope);
+                });
+            };
+
+            element.bind('change', updateModel);
+        }
+    };
+}]);
+
+
 app.filter("dateFilter", function () {
     return function (item) {
         if (item != null) {

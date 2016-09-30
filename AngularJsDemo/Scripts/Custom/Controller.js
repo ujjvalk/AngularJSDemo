@@ -40,7 +40,8 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
     //Datatable
     $scope.dtOptions = DTOptionsBuilder.newOptions();
     $scope.dtColumnDefs = [
-        DTColumnDefBuilder.newColumnDef(6).notSortable()
+        DTColumnDefBuilder.newColumnDef(7).notSortable(),
+        DTColumnDefBuilder.newColumnDef(8).notSortable()
     ];
 
     //Get List
@@ -51,7 +52,6 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
         });
     }
 
-
     //Get hobby List
     function getHobbyList() {
         var getHobby = employeeService.GetHobbyResult();
@@ -59,7 +59,6 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
             $scope.HbList = hobby.data;
         });
     }
-
 
     //GetDesignationList
     function getDesignationList() {
@@ -82,8 +81,15 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
             hobby.Selelcted = false;
         });
         $scope.myform.$setPristine();
+
+        
+        //Clear Image
+        $scope.EmpImage = "";
+        $("#FileSrcImage").css("display", "none");
+        $("#ClearImage").css("display", "none");
     }
 
+    //Save
     $scope.Save = function () {
         var emp = {
             EmpId: $scope.EmpId,
@@ -95,6 +101,7 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
             EmpDesignation: $scope.EmpDesignation,
             IsDelete: false,
             IsActive: true,
+            EmpImage:$scope.EmpImage,
             HbList: $scope.HbList
         }
         var getEmpData;
@@ -128,9 +135,39 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
         }
     }
 
+    //Upload Image
+    $scope.uploadFile = function () {
+        var file = $scope.myFile;
+        //Get file extension
+        var ext = file.name.split('.').pop();
+        if (ext == "jpg" || ext == "jpeg" || ext == "png") {
+            var uploadUrl = "/Employee/Upload";
+            var getImageData = employeeService.uploadFile(file, uploadUrl);
+            getImageData.then(function (_Image) {
+                if (_Image.data.logoError == "") {
+                    $scope.EmpImage = _Image.data.message;
+                    $("#FileSrcImage").css("display", "block");
+                    $("#FileSrcImage").attr("src", _Image.data.message);
+                    $("#ClearImage").css("display", "block");
+                }
+                else {
+                    alertify.error(_Image.data.logoError);
+                    $scope.EmpImage = "";
+                    /*Hide Image*/
+                    $("#FileSrcImage").css("display", "none");
+                    $("#ClearImage").css("display", "none");
+                }
+            });
+        }
+        else {
+            alertify.error("Only .jpg, .jpeg, .png file are allowed.");
+            $scope.EmpImage = "";
+        }
+    };
+
     //Edit
     $scope.Edit = function (emp) {
-        
+
         // parse JSON formatted date to javascript date object
         var bdate = new Date(parseInt(emp.Birthdate.substr(6)));
 
@@ -147,6 +184,11 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
             $scope.Birthdate = displayDate;
             $scope.EmpDesignation = emp.EmpDesignation;
             $scope.HbList = emp.HbList;
+            if (emp.EmpImage != null) {
+                $("#FileSrcImage").css("display", "block");
+                $("#FileSrcImage").attr("src", emp.EmpImage)
+                $("#ClearImage").css("display", "block");
+            }
         },
             function () {
                 Lobibox.notify('error', {
@@ -155,6 +197,7 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
             });
     }
 
+    //Delete
     $scope.Delete = function (emp) {
         Lobibox.confirm({
             msg: "Do you want to delete this record?",
@@ -185,6 +228,21 @@ app.controller("EmployeeController", function ($scope, employeeService, DTOption
     $scope.scrollTop = function () {
         $anchorScroll();
     }
+
+    $scope.ClearImage = function () {
+        //ClearAllfile in input
+        angular.forEach(angular.element("input[type='file']"),
+        function (inputElem) {
+            angular.element(inputElem).val(null);
+        });
+
+        $scope.EmpImage = "";
+        //Clear Image
+        $("#FileSrcImage").css("display", "none");
+        $("#ClearImage").css("display", "none");
+
+    }
+
 });
 
 //Role
@@ -291,6 +349,7 @@ app.controller("RoleController", function ($scope, roleService, DTOptionsBuilder
             }
         });
     }
+
     //Reset
     $scope.Reset = function () {
         clear();

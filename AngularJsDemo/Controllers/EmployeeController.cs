@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using AngularJsDemo.Models.CustomModel;
 using AngularJsDemo.Models.CustomRepository;
+using System.Web;
 
 namespace AngularJsDemo.Controllers
 {
@@ -120,5 +121,45 @@ namespace AngularJsDemo.Controllers
                 return Json(new { flag, message });
             }
         }
+
+        #region Upload Image
+        [HttpPost]
+        public virtual ActionResult Upload()
+        {
+            HttpPostedFileBase myFile = Request.Files["EmpImage"];
+
+            string message = "";
+            string logoError = "";
+            string ClientInfoPath = Server.MapPath("/Uploads/");
+            if (Request.Files["EmpImage"].ContentLength != 0)
+            {
+                /*Store name in database*/
+                string FileName =  DateTime.Now.ToString().Replace("-", "").Replace(":", "").Replace(" ", "").Replace("/", "");
+
+                string extention = myFile.FileName.Substring(myFile.FileName.LastIndexOf(".") + 1);
+                string fullpath = ClientInfoPath + "\\" + FileName + "." + extention;
+                if (extention == "png" || extention == "jpg" || extention == "jpeg")
+                {
+                    //System.IO.Stream stream = myFile.InputStream;
+                    //System.Drawing.Image image = System.Drawing.Image.FromStream(stream);
+
+                    //int height = image.Height;
+                    //int width = image.Width;
+
+                    //if ((width <= 200 && width>=35) && (height <= 200 && height>=35))
+                    //{
+                    myFile.SaveAs(fullpath);
+                    message = "\\Uploads\\" + FileName + "." + extention;
+                    //}
+                    //else { logoError = "Required image width and height is less than 200 and greater than 35.\n"; }
+                }
+                else
+                {
+                    message = "N";
+                }
+            }
+            return Json(new { message = message, logoError = logoError }, "text/html");
+        }
+        #endregion
     }
 }

@@ -128,8 +128,9 @@ namespace AngularJsDemo.Models.CustomRepository
                 }
                 return pageDetails;
             }
-            catch (Exception)
+            catch (Exception  ex)
             {
+                string log = ex.ToString();
                 return new EmployeeModel();
             }
         }
